@@ -33,11 +33,18 @@ class StoreOrderRequest extends FormRequest
 
     public function messages()
     {
-        return [
-            'person_name.required_without_all' => 'The contact person field is required if no organisation.',
-            'organisation_name.required_without_all' => 'The organisation field is required if no contact person.',
-            'person_id.required_without_all' => 'The contact person field is required if no organisation.',
-            'organisation_id.required_without_all' => 'The organisation field is required of no contact person.',
+        // return [
+        //     'person_name.required_without_all' => 'The contact person field is required if no organisation.',
+        //     'organisation_name.required_without_all' => 'The organisation field is required if no contact person.',
+        //     'person_id.required_without_all' => 'The contact person field is required if no organisation.',
+        //     'organisation_id.required_without_all' => 'The organisation field is required of no contact person.',
+        // ];
+
+         return [
+            'person_name.required_without_all' => 'Поле контактного лица обязательно для заполнения, если не указана организация.',
+            'organisation_name.required_without_all' => 'Поле организации обязательно для заполнения, если не указано контактное лицо.',
+            'person_id.required_without_all' => 'Поле контактного лица обязательно для заполнения, если не указана организация.',
+            'organisation_id.required_without_all' => 'Поле организации обязательно для заполнения, если не указано контактное лицо.',
         ];
     }
 }
