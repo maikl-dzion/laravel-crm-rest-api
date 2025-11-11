@@ -106,9 +106,7 @@
                 'laravel-crm.integrations',
             ]) ? 'active' : '' }}" href="{{ url(route('laravel-crm.settings.edit')) }}"><i class="fa fa-cog"></i> {{ ucfirst(__('laravel-crm::lang.settings')) }}</a></li>
             @endcan
-            @can('view crm updates')
-            <li class="nav-item"><a class="nav-link {{ Str::contains(Route::currentRouteName(),['laravel-crm.updates']) ? 'active' : '' }}" href="{{ url(route('laravel-crm.updates.index')) }}"><i class="fa fa-cloud-download"></i> {{ ucfirst(__('laravel-crm::lang.updates')) }}</a></li>
-            @endcan
+           
         </ul>
     </div>
 </div>
