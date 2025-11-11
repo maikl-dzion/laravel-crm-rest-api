@@ -34,7 +34,7 @@
         @include('laravel-crm::partials.form.select',[
            'name' => 'language',
            'label' => ucfirst(trans('laravel-crm::lang.language')),
-           'options' => ['english' => 'English'],
+           'options' => ['english' => 'English', 'russia' => 'Русский'],
            'value' => old('language', $language->value ?? 'english'),
            'required' => 'true'
         ])
