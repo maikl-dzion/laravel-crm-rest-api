@@ -5,12 +5,14 @@
 
     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
         @if(Route::has('profile.edit'))
-            <a class="dropdown-item" href="{{ route('profile.edit') }}">{{ __('Profile') }}</a>
+            <a class="dropdown-item" href="{{ route('profile.edit') }}">
+                Профиль
+            </a>
         @endif    
         <a class="dropdown-item" href="{{ route('laravel-crm.logout') }}"
            onclick="event.preventDefault(); 
             document.getElementById('logout-form').submit();">
-            {{ __('Logout') }}
+            Выход
         </a>
 
         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
