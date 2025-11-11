@@ -78,7 +78,7 @@
         </main>
         <footer class="footer mt-auto py-3">
             <div class="container-fluid">
-                <span class="text-muted">Copyright © {{ \Carbon\Carbon::now()->year }} | Powered by <a href="https://laravelcrm.com" target="_blank" rel="noopener noreferrer">Laravel CRM</a></span>
+                <span class="text-muted">Copyright © {{ \Carbon\Carbon::now()->year }} | Powered by <a href="/" target="_blank" rel="noopener noreferrer">ESM CRM</a></span>
             </div>
         </footer>
     </div>
