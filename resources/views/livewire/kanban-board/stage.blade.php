@@ -9,7 +9,7 @@
             <small class="mb-0 text-muted">
                 {{ $stage['description'] }}
             </small>
-            @endisset   
+            @endisset
         </div>
         <div class="card-body pb-1" id="{{ $stage['stageRecordsId'] }}" data-stage-id="{{ $stage['id'] }}">
             @foreach($stage['records'] as $record)
@@ -19,8 +19,15 @@
             @endforeach
         </div>
         <div class="card-footer">
-            <a href="{{ url(route('laravel-crm.'.\Illuminate\Support\Str::plural($model).'.create', ['stage' => $stage['id']])) }}" class="btn btn-primary btn-block">Add
-                {{ $model }}</a>
+            <a href="{{ url(route('laravel-crm.'.\Illuminate\Support\Str::plural($model).'.create', ['stage' => $stage['id']])) }}"
+               class="btn btn-primary btn-block">
+                Добавить
+                @if($model == 'lead')
+                    лид
+                @else
+                    {{ $model }}
+                @endif
+            </a>
         </div>
     </div>
 </div>

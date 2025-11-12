@@ -5,6 +5,7 @@ namespace VentureDrake\LaravelCrm\Http\Livewire;
 use Illuminate\Support\Collection;
 use VentureDrake\LaravelCrm\Http\Livewire\KanbanBoard\KanbanBoard;
 use VentureDrake\LaravelCrm\Models\Lead;
+use VentureDrake\LaravelCrm\Models\Person;
 use VentureDrake\LaravelCrm\Models\Pipeline;
 
 class LiveLeadBoard extends KanbanBoard
@@ -33,14 +34,19 @@ class LiveLeadBoard extends KanbanBoard
     public function records(): Collection
     {
         return $this->leads->map(function (Lead $lead) {
+
+            $person = Person::find($lead->person_id)->first();
+            $personName = (!empty($person->id)) ? $person->name : '';
+
             return [
-                'id' => $lead->id,
-                'title' => $lead->title,
+                'id'     => $lead->id,
+                'title'  => $lead->title,
                 'labels' => $lead->labels,
-                'stage' => $lead->pipelineStage->id ?? $this->firstStageId(),
+                'stage'  => $lead->pipelineStage->id ?? $this->firstStageId(),
                 'number' => $lead->lead_id,
                 'amount' => $lead->amount,
                 'currency' => $lead->currency,
+                'person_name' => $personName
             ];
         });
     }

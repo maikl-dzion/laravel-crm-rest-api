@@ -5,6 +5,7 @@ namespace VentureDrake\LaravelCrm\Http\Controllers;
 use Carbon\Carbon;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use VentureDrake\LaravelCrm\Http\Requests\StoreLeadRequest;
 use VentureDrake\LaravelCrm\Http\Requests\UpdateLeadRequest;
@@ -58,12 +59,12 @@ class LeadController extends Controller
     {
         $viewSetting = auth()->user()->crmSettings()->where('name', 'view_leads')->first();
 
-        if(! $viewSetting) {
+        if (!$viewSetting) {
             auth()->user()->crmSettings()->create([
                 'name' => 'view_leads',
                 'value' => 'list',
             ]);
-        } elseif($viewSetting->value == 'board') {
+        } elseif ($viewSetting->value == 'board') {
             return redirect(route('laravel-crm.leads.board'));
         }
 
@@ -90,21 +91,24 @@ class LeadController extends Controller
      */
     public function create(Request $request)
     {
+
+
         switch ($request->model) {
             case 'client':
                 $client = Client::find($request->id);
-
                 break;
 
             case 'organisation':
                 $organisation = Organisation::find($request->id);
-
                 break;
 
             case 'person':
                 $person = Person::find($request->id);
-
                 break;
+        }
+
+        if(empty($organisation)) {
+            $organisation = $request->user()->getRelationOrganisation();
         }
 
         return view('laravel-crm::leads.create', [
@@ -119,24 +123,24 @@ class LeadController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreLeadRequest $request)
     {
-        if ($request->person_name && ! $request->person_id) {
+        if ($request->person_name && !$request->person_id) {
             $person = $this->personService->createFromRelated($request);
         } elseif ($request->person_id) {
             $person = Person::find($request->person_id);
         }
 
-        if ($request->organisation_name && ! $request->organisation_id) {
+        if ($request->organisation_name && !$request->organisation_id) {
             $organisation = $this->organisationService->createFromRelated($request);
         } elseif ($request->organisation_id) {
             $organisation = Organisation::find($request->organisation_id);
         }
 
-        if ($request->client_name && ! $request->client_id) {
+        if ($request->client_name && !$request->client_id) {
             $client = Client::create([
                 'name' => $request->client_name,
                 'user_owner_id' => $request->user_owner_id,
@@ -171,7 +175,7 @@ class LeadController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Lead  $lead
+     * @param \App\Lead $lead
      * @return \Illuminate\Http\Response
      */
     public function show(Lead $lead)
@@ -191,7 +195,7 @@ class LeadController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Lead  $lead
+     * @param \App\Lead $lead
      * @return \Illuminate\Http\Response
      */
     public function edit(Lead $lead)
@@ -212,25 +216,25 @@ class LeadController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Lead  $lead
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Lead $lead
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateLeadRequest $request, Lead $lead)
     {
-        if ($request->person_name && ! $request->person_id) {
+        if ($request->person_name && !$request->person_id) {
             $person = $this->personService->createFromRelated($request);
         } elseif ($request->person_id) {
             $person = Person::find($request->person_id);
         }
 
-        if ($request->organisation_name && ! $request->organisation_id) {
+        if ($request->organisation_name && !$request->organisation_id) {
             $organisation = $this->organisationService->createFromRelated($request);
         } elseif ($request->person_id) {
             $organisation = Organisation::find($request->organisation_id);
         }
 
-        if ($request->client_name && ! $request->client_id) {
+        if ($request->client_name && !$request->client_id) {
             $client = Client::create([
                 'name' => $request->client_name,
                 'user_owner_id' => $request->user_owner_id,
@@ -265,7 +269,7 @@ class LeadController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Lead  $lead
+     * @param \App\Lead $lead
      * @return \Illuminate\Http\Response
      */
     public function destroy(Lead $lead)
@@ -283,7 +287,7 @@ class LeadController extends Controller
 
         $searchValue = Lead::searchValue($request);
 
-        if (! $searchValue || trim($searchValue) == '') {
+        if (!$searchValue || trim($searchValue) == '') {
             return redirect(route('laravel-crm.leads.index'));
         }
 
@@ -291,15 +295,15 @@ class LeadController extends Controller
 
         $leads = Lead::filter($params)
             ->select(
-                config('laravel-crm.db_table_prefix').'leads.*',
-                config('laravel-crm.db_table_prefix').'people.first_name',
-                config('laravel-crm.db_table_prefix').'people.middle_name',
-                config('laravel-crm.db_table_prefix').'people.last_name',
-                config('laravel-crm.db_table_prefix').'people.maiden_name',
-                config('laravel-crm.db_table_prefix').'organisations.name'
+                config('laravel-crm.db_table_prefix') . 'leads.*',
+                config('laravel-crm.db_table_prefix') . 'people.first_name',
+                config('laravel-crm.db_table_prefix') . 'people.middle_name',
+                config('laravel-crm.db_table_prefix') . 'people.last_name',
+                config('laravel-crm.db_table_prefix') . 'people.maiden_name',
+                config('laravel-crm.db_table_prefix') . 'organisations.name'
             )
-            ->leftJoin(config('laravel-crm.db_table_prefix').'people', config('laravel-crm.db_table_prefix').'leads.person_id', '=', config('laravel-crm.db_table_prefix').'people.id')
-            ->leftJoin(config('laravel-crm.db_table_prefix').'organisations', config('laravel-crm.db_table_prefix').'leads.organisation_id', '=', config('laravel-crm.db_table_prefix').'organisations.id')
+            ->leftJoin(config('laravel-crm.db_table_prefix') . 'people', config('laravel-crm.db_table_prefix') . 'leads.person_id', '=', config('laravel-crm.db_table_prefix') . 'people.id')
+            ->leftJoin(config('laravel-crm.db_table_prefix') . 'organisations', config('laravel-crm.db_table_prefix') . 'leads.organisation_id', '=', config('laravel-crm.db_table_prefix') . 'organisations.id')
             ->latest()
             ->get()
             ->filter(function ($record) use ($searchValue) {
@@ -307,7 +311,7 @@ class LeadController extends Controller
                     if (Str::contains($field, '.')) {
                         $field = explode('.', $field);
 
-                        if(config('laravel-crm.encrypt_db_fields')) {
+                        if (config('laravel-crm.encrypt_db_fields')) {
                             try {
                                 $relatedField = decrypt($record->{$field[1]});
                             } catch (DecryptException $e) {
@@ -331,7 +335,7 @@ class LeadController extends Controller
                 }
             });
 
-        if($viewSetting->value === 'board') {
+        if ($viewSetting->value === 'board') {
             return view('laravel-crm::leads.board', [
                 'leads' => $leads,
                 'searchValue' => $searchValue ?? null,
@@ -350,7 +354,7 @@ class LeadController extends Controller
     /**
      * Show the form for converting the specified resource.
      *
-     * @param  \App\Lead  $lead
+     * @param \App\Lead $lead
      * @return \Illuminate\Http\Response
      */
     public function convertToDeal(Lead $lead)
@@ -371,18 +375,18 @@ class LeadController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function storeAsDeal(StoreLeadRequest $request, Lead $lead)
     {
-        if ($request->person_name && ! $request->person_id) {
+        if ($request->person_name && !$request->person_id) {
             $person = $this->personService->createFromRelated($request);
         } elseif ($request->person_id) {
             $person = Person::find($request->person_id);
         }
 
-        if ($request->organisation_name && ! $request->organisation_id) {
+        if ($request->organisation_name && !$request->organisation_id) {
             $organisation = $this->organisationService->createFromRelated($request);
         } elseif ($request->organisation_id) {
             $organisation = Organisation::find($request->organisation_id);

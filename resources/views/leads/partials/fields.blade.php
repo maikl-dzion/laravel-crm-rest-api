@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-sm-6 border-right">
+    <div class="col-sm-6 border-right" style="border:0px red solid">
 
         @livewire('live-lead-form',[
             'lead' => $lead ?? null,
@@ -8,12 +8,26 @@
             'organisation' => $organisation ?? null,
             'person' => $person ?? null
         ])
-        
+
+{{--        <div class="form-group ">--}}
+{{--            <label for="organisation_name">--}}
+{{--                Организация <span class="required-label"> * </span></label>    <div class="autocomplete-control">--}}
+{{--                <div class="input-group dropdown show">--}}
+{{--                    <div class="input-group-prepend">--}}
+{{--                        <span class="input-group-text" id="inputGroupPrepend"><span class="fa fa-building" aria-hidden="true"></span></span>--}}
+{{--                    </div>--}}
+
+{{--                    <input id="input_organisation_name" type="text" name="organisation_name" value="" class="form-control dropdown-toggle" autocomplete="8ZczRcKLbarcTN4F" wire:model="organisation_name" data-toggle="dropdown" aria-expanded="true"><div class="dropdown-menu show" x-placement="bottom-start" style="position: absolute; transform: translate3d(38px, 37px, 0px); top: 0px; left: 0px; will-change: transform;"><button type="button" class="dropdown-item" data-value="35"><span class="text-danger">АвтоТрайдСервис</span></button></div>--}}
+{{--                </div>--}}
+{{--                <span class="badge badge-primary autocomplete-new">New</span>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+
         @include('laravel-crm::partials.form.textarea',[
              'name' => 'description',
              'label' => ucfirst(__('laravel-crm::lang.description')),
              'rows' => 5,
-             'value' => old('description', $lead->description ?? null) 
+             'value' => old('description', $lead->description ?? null)
         ])
 
         <div class="row">
@@ -22,7 +36,7 @@
                       'name' => 'amount',
                       'label' => ucfirst(__('laravel-crm::lang.value')),
                       'prepend' => '<span class="fa fa-dollar" aria-hidden="true"></span>',
-                      'value' => old('amount', ((isset($lead->amount)) ? ($lead->amount / 100) : null) ?? null) 
+                      'value' => old('amount', ((isset($lead->amount)) ? ($lead->amount / 100) : null) ?? null)
                   ])
             </div>
             <div class="col-sm-6">
@@ -49,14 +63,14 @@
                                             ->first()->id ?? null),
               ])
         @endif
-        
+
         @include('laravel-crm::partials.form.multiselect',[
                     'name' => 'labels',
                     'label' => ucfirst(__('laravel-crm::lang.labels')),
-                    'options' => \VentureDrake\LaravelCrm\Http\Helpers\SelectOptions\optionsFromModel(\VentureDrake\LaravelCrm\Models\Label::all(), false),      
+                    'options' => \VentureDrake\LaravelCrm\Http\Helpers\SelectOptions\optionsFromModel(\VentureDrake\LaravelCrm\Models\Label::all(), false),
                     'value' =>  old('labels', (isset($lead)) ? $lead->labels->pluck('id')->toArray() : null)
                 ])
-        
+
         @include('laravel-crm::partials.form.select',[
                  'name' => 'user_owner_id',
                  'label' => ucfirst(__('laravel-crm::lang.owner')),
@@ -140,7 +154,7 @@
                'attributes' => [
                          'disabled' => 'disabled'
                      ]
-               
+
             ])
             @include('laravel-crm::partials.form.text',[
                'name' => 'line3',

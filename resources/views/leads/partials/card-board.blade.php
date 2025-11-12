@@ -6,9 +6,9 @@
             {{ ucfirst(__('laravel-crm::lang.leads')) }}
         @endslot
 
-        @slot('actions') 
+        @slot('actions')
             @include('laravel-crm::partials.view-types', [
-                'model' => 'leads', 
+                'model' => 'leads',
             ])
             @include('laravel-crm::partials.filters', [
                 'action' => route('laravel-crm.leads.filter'),

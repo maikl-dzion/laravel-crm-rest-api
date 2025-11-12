@@ -9,7 +9,7 @@
         @slot('actions')
             @if($pipeline)
                 @include('laravel-crm::partials.view-types', [
-                    'model' => 'leads', 
+                    'model' => 'leads',
                     'viewSetting' => $viewSetting ?? 'list'
                 ])
             @endif
@@ -26,15 +26,15 @@
 
     @component('laravel-crm::components.card-table')
 
-        <table class="table mb-0 card-table table-hover">
+        <table class="table mb-0 card-table table-hover" >
             <thead>
             <tr>
                 <th scope="col">{{ ucwords(__('laravel-crm::lang.created')) }}</th>
                 <th scope="col">{{ ucwords(__('laravel-crm::lang.title')) }}</th>
                 <th scope="col">{{ ucwords(__('laravel-crm::lang.labels')) }}</th>
-                <th scope="col">{{ ucwords(__('laravel-crm::lang.value')) }}</th>
+{{--                <th scope="col">{{ ucwords(__('laravel-crm::lang.value')) }}</th>--}}
                 <th scope="col">{{ ucwords(__('laravel-crm::lang.client')) }}</th>
-                <th scope="col">{{ ucwords(__('laravel-crm::lang.organization')) }}</th>
+{{--                <th scope="col">{{ ucwords(__('laravel-crm::lang.organization')) }}</th>--}}
                 <th scope="col">{{ ucwords(__('laravel-crm::lang.contact_person')) }}</th>
                 <th scope="col">{{ ucwords(__('laravel-crm::lang.stage')) }}</th>
                 <th scope="col">{{ ucwords(__('laravel-crm::lang.owner')) }}</th>
@@ -50,9 +50,9 @@
                             'labels' => $lead->labels,
                             'limit' => 3
                         ])</td>
-                    <td>{{ money($lead->amount, $lead->currency) }}</td>
+{{--                    <td>{{ money($lead->amount, $lead->currency) }}</td>--}}
                     <td>{{ $lead->client->name ?? null}}</td>
-                    <td>{{ $lead->organisation->name ?? null}}</td>
+{{--                    <td>{{ $lead->organisation->name ?? null}}</td>--}}
                     <td>{{ $lead->person->name ??  null }}</td>
                     <td>{{ $lead->pipelineStage->name ?? null }}</td>
                     <td>{{ $lead->ownerUser->name ?? ucfirst(__('laravel-crm::lang.unallocated')) }}</td>
