@@ -6,7 +6,7 @@
         @component('laravel-crm::components.card-header')
 
             @slot('title')
-                {{ ucfirst(__('laravel-crm::lang.edit_lead')) }}
+                {{ ucfirst(__('laravel-crm::lang.edit_lead')) }} ({{$lead->lead_id}})
             @endslot
 
             @slot('actions')

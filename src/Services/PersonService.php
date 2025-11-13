@@ -51,17 +51,24 @@ class PersonService
         $name = \VentureDrake\LaravelCrm\Http\Helpers\PersonName\firstLastFromName($request->person_name);
 
         $person = Person::create([
-            'external_id' => Uuid::uuid4()->toString(),
-            'first_name' => $name['first_name'],
-            'last_name' => $name['last_name'] ?? null,
-            'user_owner_id' => $request->user_owner_id ?? auth()->user()->id,
+            'external_id'   => Uuid::uuid4()->toString(),
+            'first_name'    => $request->first_name,
+            'phone'         => $request->phone,
+            'last_name'     => $request->last_name ?? null,
+            'middle_name'   => $request->middle_name ?? null,
+            'birthday'      => $request->birthday ?? null,
+            'gender'           => $request->gender ?? null,
+            'person_address'   => $request->person_address ?? null,
+            'register_address' => $request->register_address ?? null,
+            'check_address'    => $request->check_address ?? null,
+            'user_owner_id'    => $request->user_owner_id ?? auth()->user()->id,
         ]);
 
         if ($request->phone) {
             $person->phones()->create([
                 'external_id' => Uuid::uuid4()->toString(),
-                'number' => $request->phone,
-                'type' => $request->phone_type,
+                'number'  => $request->phone,
+                'type'    => $request->phone_type,
                 'primary' => (($request->phone_primary) ? 1 : 0),
             ]);
         }
@@ -80,20 +87,42 @@ class PersonService
 
     public function update(Person $person, $request)
     {
+
+        if(empty($request->description)) {
+            $request->description = $person->description;
+        }
+
+        if(empty($request->title)) {
+            $request->title = $person->title;
+        }
+
         $person->update([
             'title' => $request->title,
-            'first_name' => $request->first_name,
+            'first_name'  => $request->first_name,
             'middle_name' => $request->middle_name,
-            'last_name' => $request->last_name,
-            'gender' => $request->gender,
-            'birthday' => $request->birthday,
+            'last_name'   => $request->last_name,
+            'gender'      => $request->gender,
+            'birthday'    => $request->birthday,
             'description' => $request->description,
-            'user_owner_id' => $request->user_owner_id,
+            'person_address'   => $request->person_address ?? null,
+            'register_address' => $request->register_address ?? null,
+            'check_address'    => $request->check_address ?? null,
+            'user_owner_id'    => $request->user_owner_id,
+            // 'phone'         => $request->phone,
+
         ]);
 
-        $this->updatePersonPhones($person, $request->phones);
-        $this->updatePersonEmails($person, $request->emails);
-        $this->updatePersonAddresses($person, $request->addresses);
+        if(!empty($request->phones)) {
+            $this->updatePersonPhones($person, $request->phones);
+        }
+
+        if(!empty($request->emails)) {
+            $this->updatePersonEmails($person, $request->emails);
+        }
+
+        if(!empty($request->addresses)) {
+            $this->updatePersonAddresses($person, $request->addresses);
+        }
 
         return $person;
     }

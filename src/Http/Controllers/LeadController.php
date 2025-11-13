@@ -19,6 +19,7 @@ use VentureDrake\LaravelCrm\Services\DealService;
 use VentureDrake\LaravelCrm\Services\LeadService;
 use VentureDrake\LaravelCrm\Services\OrganisationService;
 use VentureDrake\LaravelCrm\Services\PersonService;
+use VentureDrake\LaravelCrm\Models\LeadSource;
 
 class LeadController extends Controller
 {
@@ -84,6 +85,22 @@ class LeadController extends Controller
         ]);
     }
 
+
+    protected function getLeadSources() : mixed
+    {
+        $sources = LeadSource::all();
+
+        $leadSources = [];
+
+        $leadSources[0] = 'Выбрать источник';
+
+        foreach ($sources as $source) {
+            $leadSources[$source->id] = $source->name;
+        }
+
+        return $leadSources;
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -91,7 +108,6 @@ class LeadController extends Controller
      */
     public function create(Request $request)
     {
-
 
         switch ($request->model) {
             case 'client':
@@ -111,12 +127,15 @@ class LeadController extends Controller
             $organisation = $request->user()->getRelationOrganisation();
         }
 
+        $leadSources = $this->getLeadSources();
+
         return view('laravel-crm::leads.create', [
             'client' => $client ?? null,
             'organisation' => $organisation ?? null,
-            'person' => $person ?? null,
+            'person'   => $person ?? null,
             'pipeline' => Pipeline::where('model', get_class(new Lead()))->first(),
-            'stage' => $request->stage ?? null
+            'stage'    => $request->stage ?? null,
+            'lead_sources'  => $leadSources
         ]);
     }
 
@@ -126,9 +145,15 @@ class LeadController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreLeadRequest $request)
+    public function store(Request $request)
+    // public function store(StoreLeadRequest $request)
     {
-        if ($request->person_name && !$request->person_id) {
+
+        // dd($request->all());
+
+        $client = null;
+
+        if (empty($request->person_id)) {
             $person = $this->personService->createFromRelated($request);
         } elseif ($request->person_id) {
             $person = Person::find($request->person_id);
@@ -140,30 +165,31 @@ class LeadController extends Controller
             $organisation = Organisation::find($request->organisation_id);
         }
 
-        if ($request->client_name && !$request->client_id) {
-            $client = Client::create([
-                'name' => $request->client_name,
-                'user_owner_id' => $request->user_owner_id,
-            ]);
-        } elseif ($request->client_id) {
-            $client = Client::find($request->client_id);
-        }
-
-        if (isset($client)) {
-            if (isset($organisation)) {
-                $client->contacts()->firstOrCreate([
-                    'entityable_type' => $organisation->getMorphClass(),
-                    'entityable_id' => $organisation->id,
-                ]);
-            }
-
-            if (isset($person)) {
-                $client->contacts()->firstOrCreate([
-                    'entityable_type' => $person->getMorphClass(),
-                    'entityable_id' => $person->id,
-                ]);
-            }
-        }
+//        if ($request->client_name && !$request->client_id) {
+//            $client = Client::create([
+//                'name' => $request->client_name,
+//                'user_owner_id' => $request->user_owner_id,
+//            ]);
+//        } elseif ($request->client_id) {
+//            $client = Client::find($request->client_id);
+//        }
+//
+//        if (isset($client)) {
+//
+//            if (isset($organisation)) {
+//                $client->contacts()->firstOrCreate([
+//                    'entityable_type' => $organisation->getMorphClass(),
+//                    'entityable_id' => $organisation->id,
+//                ]);
+//            }
+//
+//            if (isset($person)) {
+//                $client->contacts()->firstOrCreate([
+//                    'entityable_type' => $person->getMorphClass(),
+//                    'entityable_id' => $person->id,
+//                ]);
+//            }
+//        }
 
         $lead = $this->leadService->create($request, $person ?? null, $organisation ?? null, $client ?? null);
 
@@ -198,17 +224,25 @@ class LeadController extends Controller
      * @param \App\Lead $lead
      * @return \Illuminate\Http\Response
      */
-    public function edit(Lead $lead)
+    public function edit(Lead $lead, Request $request)
     {
-        $email = $lead->getPrimaryEmail();
-        $phone = $lead->getPrimaryPhone();
+        $email   = $lead->getPrimaryEmail();
+        $phone   = $lead->getPrimaryPhone();
         $address = $lead->getPrimaryAddress();
+        $person  = $lead->person;
+
+        $leadSources = $this->getLeadSources();
+
+        $organisation = $request->user()->getRelationOrganisation();
 
         return view('laravel-crm::leads.edit', [
-            'lead' => $lead,
-            'email' => $email ?? null,
-            'phone' => $phone ?? null,
-            'address' => $address ?? null,
+            'lead'     => $lead,
+            'email'    => $email ?? null,
+            'phone'    => $phone ?? null,
+            'address'  => $address ?? null,
+            'person'   => $person,
+            'lead_sources'  => $leadSources,
+            'organisation'  => $organisation ?? null,
             'pipeline' => Pipeline::where('model', get_class(new Lead()))->first()
         ]);
     }
@@ -220,13 +254,24 @@ class LeadController extends Controller
      * @param \App\Lead $lead
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateLeadRequest $request, Lead $lead)
+    public function update(Request $request, Lead $lead)
+    // public function update(UpdateLeadRequest $request, Lead $lead)
     {
-        if ($request->person_name && !$request->person_id) {
-            $person = $this->personService->createFromRelated($request);
-        } elseif ($request->person_id) {
-            $person = Person::find($request->person_id);
+        $client = null;
+
+//        if ($request->person_name && !$request->person_id) {
+//            $person = $this->personService->createFromRelated($request);
+//        } elseif ($request->person_id) {
+//            $person = Person::find($request->person_id);
+//        }
+
+        // dd($request->all());
+
+        if ($request->person_id) {
+            $person = $this->personService->update(Person::find($request->person_id), $request);
         }
+
+        $person = Person::find($request->person_id);
 
         if ($request->organisation_name && !$request->organisation_id) {
             $organisation = $this->organisationService->createFromRelated($request);
@@ -234,30 +279,30 @@ class LeadController extends Controller
             $organisation = Organisation::find($request->organisation_id);
         }
 
-        if ($request->client_name && !$request->client_id) {
-            $client = Client::create([
-                'name' => $request->client_name,
-                'user_owner_id' => $request->user_owner_id,
-            ]);
-        } elseif ($request->client_id) {
-            $client = Client::find($request->client_id);
-        }
+//        if ($request->client_name && !$request->client_id) {
+//            $client = Client::create([
+//                'name' => $request->client_name,
+//                'user_owner_id' => $request->user_owner_id,
+//            ]);
+//        } elseif ($request->client_id) {
+//            $client = Client::find($request->client_id);
+//        }
 
-        if (isset($client)) {
-            if (isset($organisation)) {
-                $client->contacts()->firstOrCreate([
-                    'entityable_type' => $organisation->getMorphClass(),
-                    'entityable_id' => $organisation->id,
-                ]);
-            }
-
-            if (isset($person)) {
-                $client->contacts()->firstOrCreate([
-                    'entityable_type' => $person->getMorphClass(),
-                    'entityable_id' => $person->id,
-                ]);
-            }
-        }
+//        if (isset($client)) {
+//            if (isset($organisation)) {
+//                $client->contacts()->firstOrCreate([
+//                    'entityable_type' => $organisation->getMorphClass(),
+//                    'entityable_id' => $organisation->id,
+//                ]);
+//            }
+//
+//            if (isset($person)) {
+//                $client->contacts()->firstOrCreate([
+//                    'entityable_type' => $person->getMorphClass(),
+//                    'entityable_id' => $person->id,
+//                ]);
+//            }
+//        }
 
         $lead = $this->leadService->update($request, $lead, $person ?? null, $organisation ?? null, $client ?? null);
 

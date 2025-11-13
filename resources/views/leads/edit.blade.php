@@ -1,7 +1,9 @@
 @extends('laravel-crm::layouts.app')
 
 @section('content')
-    
-    @include('laravel-crm::leads.partials.card-edit')
-    
+
+    @include('laravel-crm::leads.partials.card-edit', [
+         'action' => 'edit'
+    ])
+
 @endsection

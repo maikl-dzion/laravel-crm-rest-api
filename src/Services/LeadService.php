@@ -25,18 +25,20 @@ class LeadService
 
     public function create($request, $person = null, $organisation = null, $client = null)
     {
+
         $lead = Lead::create([
-            'external_id' => Uuid::uuid4()->toString(),
-            'person_id' => $person->id ?? null,
+            'external_id'     => Uuid::uuid4()->toString(),
+            'person_id'       => $person->id ?? null,
             'organisation_id' => $organisation->id ?? null,
-            'client_id' => $client->id ?? null,
-            'title' => $request->title,
-            'description' => $request->description,
-            'amount' => $request->amount,
-            'currency' => $request->currency,
-            'lead_status_id' => 1,
-            'user_owner_id' => $request->user_owner_id,
-            'pipeline_id' => PipelineStage::find($request->pipeline_stage_id)->pipeline->id ?? null,
+            'client_id'       => $client->id ?? null,
+            'title'           => $request->title ?? '' ,
+            'description'     => $request->description ?? null,
+            'amount'          => $request->amount ?? 0,
+            'currency'        => $request->currency ?? 'RUB',
+            'lead_source_id'  => $request->lead_source_id ?? null,
+            'lead_status_id'  => 1,
+            'user_owner_id'   => $request->user_owner_id,
+            'pipeline_id'     => PipelineStage::find($request->pipeline_stage_id)->pipeline->id ?? null,
             'pipeline_stage_id' => $request->pipeline_stage_id ?? null,
         ]);
 
@@ -47,14 +49,18 @@ class LeadService
 
     public function update($request, Lead $lead, $person = null, $organisation = null, $client = null)
     {
+        if(empty($request->title)) {
+            $request->title = $lead->title;
+        }
+
         $lead->update([
             'person_id' => $person->id ?? null,
             'organisation_id' => $organisation->id ?? null,
             'client_id' => $client->id ?? null,
             'title' => $request->title,
             'description' => $request->description,
-            'amount' => $request->amount,
-            'currency' => $request->currency,
+            'amount' => $request->amount ?? 0,
+            'currency' => $request->currency ?? 'RUB',
             'user_owner_id' => $request->user_owner_id,
             'pipeline_id' => PipelineStage::find($request->pipeline_stage_id)->pipeline->id ?? null,
             'pipeline_stage_id' => $request->pipeline_stage_id ?? null,

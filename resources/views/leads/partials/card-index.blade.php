@@ -33,25 +33,27 @@
                 <th scope="col">{{ ucwords(__('laravel-crm::lang.title')) }}</th>
                 <th scope="col">{{ ucwords(__('laravel-crm::lang.labels')) }}</th>
 {{--                <th scope="col">{{ ucwords(__('laravel-crm::lang.value')) }}</th>--}}
-                <th scope="col">{{ ucwords(__('laravel-crm::lang.client')) }}</th>
+{{--                <th scope="col">{{ ucwords(__('laravel-crm::lang.client')) }}</th>--}}
 {{--                <th scope="col">{{ ucwords(__('laravel-crm::lang.organization')) }}</th>--}}
-                <th scope="col">{{ ucwords(__('laravel-crm::lang.contact_person')) }}</th>
+{{--                <th scope="col">{{ ucwords(__('laravel-crm::lang.contact_person')) }}</th>--}}
+                <th scope="col">Клиент</th>
                 <th scope="col">{{ ucwords(__('laravel-crm::lang.stage')) }}</th>
-                <th scope="col">{{ ucwords(__('laravel-crm::lang.owner')) }}</th>
+{{--                <th scope="col">{{ ucwords(__('laravel-crm::lang.owner')) }}</th>--}}
+                <th scope="col"> Ответственный </th>
                 <th scope="col" width="210"></th>
             </tr>
             </thead>
             <tbody>
             @foreach($leads as $lead)
                 <tr class="has-link" data-url="{{ url(route('laravel-crm.leads.show',$lead)) }}">
-                    <td>{{ $lead->created_at->diffForHumans() }}</td>
+                    <td>{{ $lead->created_at->locale('ru')->diffForHumans() }}</td>
                     <td>{{ $lead->title }}</td>
                     <td>@include('laravel-crm::partials.labels',[
                             'labels' => $lead->labels,
                             'limit' => 3
                         ])</td>
 {{--                    <td>{{ money($lead->amount, $lead->currency) }}</td>--}}
-                    <td>{{ $lead->client->name ?? null}}</td>
+{{--                    <td>{{ $lead->client->name ?? null}}</td>--}}
 {{--                    <td>{{ $lead->organisation->name ?? null}}</td>--}}
                     <td>{{ $lead->person->name ??  null }}</td>
                     <td>{{ $lead->pipelineStage->name ?? null }}</td>
@@ -59,7 +61,9 @@
                     <td class="disable-link text-right">
                         @hasdealsenabled
                             @can('edit crm leads')
-                            <a href="{{ route('laravel-crm.leads.convert-to-deal',$lead) }}" class="btn btn-success btn-sm"> {{ ucfirst(__('laravel-crm::lang.convert')) }}</a>
+                            <a href="{{ route('laravel-crm.leads.convert-to-deal',$lead) }}" class="btn btn-success btn-sm">
+                                {{ ucfirst(__('laravel-crm::lang.convert')) }} в сделку
+                            </a>
                             @endcan
                         @endhasdealsenabled
                         @can('view crm leads')

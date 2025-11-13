@@ -46,16 +46,16 @@
         <li class="nav-item">
             <a class="nav-link" data-toggle="tab" id="tab-calls" href="#tabs-calls">{{ ucfirst(__('laravel-crm::lang.calls')) }}</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" id="tab-meetings" href="#tabs-meetings">{{ ucfirst(__('laravel-crm::lang.meetings')) }}</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" id="tab-lunches" href="#tabs-lunches">{{ ucfirst(__('laravel-crm::lang.lunches')) }}</a>
-        </li>
+{{--        <li class="nav-item">--}}
+{{--            <a class="nav-link" data-toggle="tab" id="tab-meetings" href="#tabs-meetings">{{ ucfirst(__('laravel-crm::lang.meetings')) }}</a>--}}
+{{--        </li>--}}
+{{--        <li class="nav-item">--}}
+{{--            <a class="nav-link" data-toggle="tab" id="tab-lunches" href="#tabs-lunches">{{ ucfirst(__('laravel-crm::lang.lunches')) }}</a>--}}
+{{--        </li>--}}
         <li class="nav-item">
             <a class="nav-link" data-toggle="tab" id="tab-files" href="#tabs-files">{{ ucfirst(__('laravel-crm::lang.files')) }}</a>
         </li>
-    @endif    
+    @endif
 </ul>
 <div class="tab-content">
     <div class="tab-pane fadev show active" id="tabs-activities">
@@ -66,7 +66,7 @@
         </div>
     </div>
     @isset($purchaseOrders)
-        <div class="tab-pane fade" id="tabs-orders">
+        <div class="tab-pane fade" id="tabs-orders" >
             <div class="card-body pl-0 pr-0">
                 @include('laravel-crm::purchase-orders.partials.card-index-related',[
                     'purchaseOrders' => $purchaseOrders
@@ -129,6 +129,7 @@
             ])
         </div>
     </div>
+
     <div class="tab-pane fade" id="tabs-lunches">
         <div class="card-body pl-0 pr-0">
             @livewire('lunches', [
@@ -136,6 +137,7 @@
             ])
         </div>
     </div>
+
     <div class="tab-pane fade" id="tabs-files">
         <div class="card-body pl-0 pr-0">
             @livewire('files', [

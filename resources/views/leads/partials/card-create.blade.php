@@ -19,7 +19,9 @@
 
         @component('laravel-crm::components.card-body')
 
-            @include('laravel-crm::leads.partials.fields')
+            @include('laravel-crm::leads.partials.fields', [
+               'action' => 'create'
+            ])
 
         @endcomponent
 
