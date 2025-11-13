@@ -10,6 +10,11 @@
     {!! $task->description !!}
     @if($task->due_at)
         <br />
-        @include('laravel-crm::livewire.components.partials.task.status') <span class="badge badge-secondary">{{ ucfirst(__('laravel-crm::lang.due')) }} {{ $task->due_at->format('h:i A') }} on {{ $task->due_at->toFormattedDateString() }}</span>
+        @include('laravel-crm::livewire.components.partials.task.status')
+        <span class="badge badge-secondary">
+{{--            {{ ucfirst(__('laravel-crm::lang.due')) }}--}}
+{{--            В ожидании--}}
+            {{ $task->due_at->format('H:i') }} на {{ $task->due_at->translatedFormat('j M Y') }}
+        </span>
     @endif
 @endif

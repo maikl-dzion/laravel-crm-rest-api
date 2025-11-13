@@ -14,7 +14,11 @@
                         @endif
                     </p>
                 @endif
-                <br /><small>{{ $file->created_at->format('h:i A') }} on {{ $file->created_at->toFormattedDateString() }} | {{ $file->createdByUser->name }} | {{ ($file->filesize / 1000) }} kB</small>
+                <br /><small>
+                    {{ $file->created_at->format('H:i') }} на {{ $file->created_at->translatedFormat('j M Y') }}
+                    | {{ $file->createdByUser->name }}
+                    | {{ ($file->filesize / 1000) }} kb
+                </small>
             </div>
         </div>
     </div>

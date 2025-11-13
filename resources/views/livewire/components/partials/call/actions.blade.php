@@ -3,7 +3,7 @@
         <span aria-hidden="true"><span class="fa fa-ellipsis-h" aria-hidden="true"></span></span>
     </button>
     <div class="dropdown-menu">
-        <a class="dropdown-item" href="#edit" wire:click="toggleEditMode()">Edit</a>
-        <a class="dropdown-item" href="#delete" wire:click.prevent="delete()">Delete</a>
+        <a class="dropdown-item" href="#edit" wire:click="toggleEditMode()"> Редактировать </a>
+        <a class="dropdown-item" href="#delete" wire:click.prevent="delete()"> Удалить </a>
     </div>
 </div>

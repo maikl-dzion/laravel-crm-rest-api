@@ -8,10 +8,10 @@
                     <p class="pb-0 mb-2">
                         @if($call->callable instanceof \VentureDrake\LaravelCrm\Models\Person)
                             <span class="fa fa-user-circle" aria-hidden="true"></span> <a
-                                    href="{{ route('laravel-crm.people.show', $call->callable) }}">{{ $call->callable->name }}</a>
+                                href="{{ route('laravel-crm.people.show', $call->callable) }}">{{ $call->callable->name }}</a>
                         @elseif($call->callable instanceof \VentureDrake\LaravelCrm\Models\Organisation)
                             <span class="fa fa-building" aria-hidden="true"></span> <a
-                                    href="{{ route('laravel-crm.organisations.show', $call->callable) }}">{{ $call->callable->name }}</a>
+                                href="{{ route('laravel-crm.organisations.show', $call->callable) }}">{{ $call->callable->name }}</a>
                         @endif
                     </p>
                 @endif
@@ -23,16 +23,16 @@
         <script>
             $(document).ready(function () {
                 $(document).on("change", ".calls input[name='start_at']", function () {
-                    @this.set('start_at', $(this).val());
+                @this.set('start_at', $(this).val());
                 });
 
                 $(document).on("change", ".calls input[name='finish_at']", function () {
-                    @this.set('finish_at', $(this).val());
+                @this.set('finish_at', $(this).val());
                 });
 
                 $(document).on("change", '.calls select[name="guests[]"]', function (e) {
                     var data = $('.calls select[name="guests[]"]').select2("val");
-                    @this.set('guests', data);
+                @this.set('guests', data);
                 });
             });
         </script>

@@ -92,12 +92,14 @@ class PersonService
             $request->description = $person->description;
         }
 
-        if(empty($request->title)) {
-            $request->title = $person->title;
+        if(empty($request->person_title)) {
+            $personTitle = $person->title;
+        } else {
+            $personTitle = $request->person_title;
         }
 
         $person->update([
-            'title' => $request->title,
+            'title' => $personTitle,
             'first_name'  => $request->first_name,
             'middle_name' => $request->middle_name,
             'last_name'   => $request->last_name,
@@ -109,7 +111,6 @@ class PersonService
             'check_address'    => $request->check_address ?? null,
             'user_owner_id'    => $request->user_owner_id,
             // 'phone'         => $request->phone,
-
         ]);
 
         if(!empty($request->phones)) {

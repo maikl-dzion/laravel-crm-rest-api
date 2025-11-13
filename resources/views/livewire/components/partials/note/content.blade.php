@@ -6,11 +6,15 @@
             <button type="submit" class="btn btn-primary">{{ ucfirst(__('laravel-crm::lang.save')) }}</button>
         </div>
     </form>
-@else    
+@else
     {!! $note->content !!}
     @if($note->noted_at)
         <br />
-        <span class="badge badge-secondary">{{ ucfirst(__('laravel-crm::lang.noted_at')) }} {{ $note->noted_at->format('h:i A') }} on {{ $note->noted_at->toFormattedDateString() }}</span>
+        <span class="badge badge-secondary">
+            {{ ucfirst(__('laravel-crm::lang.noted_at')) }}
+            {{ $note->noted_at->format('H:i') }}
+            на
+            {{ $note->noted_at->translatedFormat('j M Y') }}
+        </span>
     @endif
-@endif  
-    
+@endif

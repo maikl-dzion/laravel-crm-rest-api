@@ -75,7 +75,7 @@
         </div>
     @endisset
     @isset($orders)
-    <div class="tab-pane fade" id="tabs-orders">
+    <div class="tab-pane fade" id="tabs-orders" >
         <div class="card-body pl-0 pr-0">
             @include('laravel-crm::orders.partials.card-index-related',[
                 'orders' => $orders
@@ -101,7 +101,7 @@
             </div>
         </div>
     @endisset
-    <div class="tab-pane fade" id="tabs-notes">
+    <div class="tab-pane fade" id="tabs-notes" >
         <div class="card-body pl-0 pr-0">
             @livewire('notes', [
             'model' => $model

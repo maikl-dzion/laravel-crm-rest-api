@@ -34,13 +34,13 @@
         @include('laravel-crm::partials.form.multiselect',[
           'name' => 'guests',
           'label' => ucfirst(__('laravel-crm::lang.guests')),
-          'options' => \VentureDrake\LaravelCrm\Http\Helpers\SelectOptions\optionsFromModel(\VentureDrake\LaravelCrm\Models\Person::all(), false),      
+          'options' => \VentureDrake\LaravelCrm\Http\Helpers\SelectOptions\optionsFromModel(\VentureDrake\LaravelCrm\Models\Person::all(), false),
           'attributes' => [
                'wire:model' => 'guests',
           ]
         ])
     </span>
-    
+
     @include('laravel-crm::partials.form.text',[
      'name' => 'location',
      'label' => ucfirst(__('laravel-crm::lang.location')),
@@ -104,7 +104,7 @@
       'attributes' => [
          'wire:model' => 'guests',
        ]
-    ])  
+    ])
     </span>
     @include('laravel-crm::partials.form.text',[
      'name' => 'location',

@@ -4,7 +4,7 @@
             {{--<img src="..." class="mr-3" alt="...">--}}
             <div class="media-body">
                 @if($note->relatedNote)
-                    <h5 class="mt-0 mb-1">{{ $note->relatedNote->created_at->diffForHumans() }}
+                    <h5 class="mt-0 mb-1">{{ $note->relatedNote->created_at->locale('ru')->diffForHumans() }}
                         - {{ $note->relatedNote->createdByUser->name }} @include('laravel-crm::livewire.components.partials.note.actions', ['note' => $note])</h5>
                     <p class="pb-0 mb-2">
                         @if($note->relatedNote->noteable instanceof \VentureDrake\LaravelCrm\Models\Person)
@@ -17,7 +17,7 @@
                     </p>
                     @include('laravel-crm::livewire.components.partials.note.content', ['note' => $note->relatedNote])
                 @else
-                    <h5 class="mt-0 mb-1">{{ $note->created_at->diffForHumans() }}
+                    <h5 class="mt-0 mb-1">{{ $note->created_at->locale('ru')->diffForHumans() }}
                         - {{ $note->createdByUser->name }} @include('laravel-crm::livewire.components.partials.note.actions', ['note' => $note])</h5>
                     @if($showRelated)
                         <p class="pb-0 mb-2">
@@ -27,7 +27,7 @@
                         @elseif($note->noteable instanceof \VentureDrake\LaravelCrm\Models\Organisation)
                             <span class="fa fa-building" aria-hidden="true"></span> <a
                                     href="{{ route('laravel-crm.organisations.show', $note->noteable) }}">{{ $note->noteable->name }}</a>
-                        @endif   
+                        @endif
                         </p>
                     @endif
                     @include('laravel-crm::livewire.components.partials.note.content', ['note' => $note])
@@ -39,7 +39,7 @@
         <script>
             $(document).ready(function () {
                 $(document).on("change", "input[name='noted_at']", function () {
-                @this.set('noted_at', $(this).val());
+                   @this.set('noted_at', $(this).val());
                 });
             });
         </script>
