@@ -80,6 +80,7 @@ Route::get('/', 'VentureDrake\LaravelCrm\Http\Controllers\DashboardController@in
 /* Leads */
 
 Route::group(['prefix' => 'leads','middleware' => 'auth.laravel-crm'], function () {
+
     Route::any('filter', 'VentureDrake\LaravelCrm\Http\Controllers\LeadController@index')
         ->name('laravel-crm.leads.filter')
         ->middleware(['can:viewAny,VentureDrake\LaravelCrm\Models\Lead']);

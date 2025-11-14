@@ -2,13 +2,9 @@
 <div class="col-sm-6 col-md-4 col-xl-3">
     <div class="card mb-3">
         <div class="card-header bg-light">
-            <h3 class="card-title h5 mb-1">
-                {{ $stage['name'] }}
-            </h3>
+            <h3 class="card-title h5 mb-1">{{ $stage['name'] }}</h3>
             @isset($stage['description'] )
-            <small class="mb-0 text-muted">
-                {{ $stage['description'] }}
-            </small>
+              <small class="mb-0 text-muted">{{ $stage['description'] }}</small>
             @endisset
         </div>
         <div class="card-body pb-1" id="{{ $stage['stageRecordsId'] }}" data-stage-id="{{ $stage['id'] }}">
@@ -22,10 +18,8 @@
             <a href="{{ url(route('laravel-crm.'.\Illuminate\Support\Str::plural($model).'.create', ['stage' => $stage['id']])) }}"
                class="btn btn-primary btn-block">
                 Добавить
-                @if($model == 'lead')
-                    лид
-                @else
-                    {{ $model }}
+                @if($model == 'lead') лид
+                @else  {{ $model }}
                 @endif
             </a>
         </div>

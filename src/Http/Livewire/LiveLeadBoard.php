@@ -35,8 +35,12 @@ class LiveLeadBoard extends KanbanBoard
     {
         return $this->leads->map(function (Lead $lead) {
 
-            $person = Person::find($lead->person_id)->first();
-            $personName = (!empty($person->id)) ? $person->name : '';
+            // $person = Person::find($lead->person_id)->first();
+            $personName = $phone = '';
+            if(!empty($lead->person_id)) {
+                $personName = $lead->person->first_name .' ' . $lead->person->last_name;
+                $phone = $lead->person->phone;
+            }
 
             return [
                 'id'     => $lead->id,
@@ -44,9 +48,10 @@ class LiveLeadBoard extends KanbanBoard
                 'labels' => $lead->labels,
                 'stage'  => $lead->pipelineStage->id ?? $this->firstStageId(),
                 'number' => $lead->lead_id,
-                'amount' => $lead->amount,
-                'currency' => $lead->currency,
-                'person_name' => $personName
+                'amount'      => $lead->amount,
+                'currency'    => $lead->currency,
+                'phone'       => $phone,
+                'person_name' => $personName,
             ];
         });
     }

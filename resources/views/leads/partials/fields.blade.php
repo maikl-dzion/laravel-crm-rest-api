@@ -38,7 +38,7 @@
                     </div>
                 </div>
                 <div class="col-6">
-                    <label for="call_back"> Приехал </label>
+                    <label for="call_back"> Приедет </label>
                     <div class="autocomplete-control">
                         <input type="datetime-local" value="{{$lead->will_come ?? ''}}" name="will_come"  id="input_call_back"  class="form-control">
                     </div>

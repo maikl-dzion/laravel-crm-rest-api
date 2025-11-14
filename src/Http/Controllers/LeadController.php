@@ -61,15 +61,18 @@ class LeadController extends Controller
         $viewSetting = auth()->user()->crmSettings()->where('name', 'view_leads')->first();
 
         if (!$viewSetting) {
+
             auth()->user()->crmSettings()->create([
                 'name' => 'view_leads',
                 'value' => 'list',
             ]);
+
         } elseif ($viewSetting->value == 'board') {
             return redirect(route('laravel-crm.leads.board'));
         }
 
         Lead::resetSearchValue($request);
+
         $params = Lead::filters($request);
 
         if (Lead::filter($params)->whereNull('converted_at')->get()->count() < 30) {

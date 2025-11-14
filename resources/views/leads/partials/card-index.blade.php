@@ -45,6 +45,7 @@
 {{--                <th scope="col">{{ ucwords(__('laravel-crm::lang.organization')) }}</th>--}}
 {{--                <th scope="col">{{ ucwords(__('laravel-crm::lang.contact_person')) }}</th>--}}
                 <th scope="col"> Перезвонить</th>
+                <th scope="col"> Телефон </th>
                 <th scope="col"> Клиент </th>
                 <th scope="col">{{ ucwords(__('laravel-crm::lang.stage')) }}</th>
 {{--                <th scope="col">{{ ucwords(__('laravel-crm::lang.owner')) }}</th>--}}
@@ -64,7 +65,12 @@
 {{--                    <td>{{ money($lead->amount, $lead->currency) }}</td>--}}
 {{--                    <td>{{ $lead->client->name ?? null}}</td>--}}
 {{--                    <td>{{ $lead->organisation->name ?? null}}</td>--}}
-                    <td>{{ $lead->call_back ??  null }}</td>
+                    <td>
+                        @php
+                         if(!empty($lead->call_back)) echo (new DateTimeImmutable($lead->call_back))->format('d.m.Y H:i');
+                        @endphp
+                    </td>
+                    <td>{{ $lead->person->phone ??  null }}</td>
                     <td>{{ $lead->person->name ??  null }}</td>
                     <td>{{ $lead->pipelineStage->name ?? null }}</td>
                     <td>{{ $lead->ownerUser->name ?? ucfirst(__('laravel-crm::lang.unallocated')) }}</td>

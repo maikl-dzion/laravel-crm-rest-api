@@ -9,20 +9,26 @@
         ])
 
         <div class="mt-2">
-            <a href="{{ url(route('laravel-crm.'.\Illuminate\Support\Str::plural($model).'.show', $record['id'])) }}">{{ $record['number'] }}</a>
+            <a href="{{ url(route('laravel-crm.'.\Illuminate\Support\Str::plural($model).'.show', $record['id'])) }}">
+                {{ $record['number'] }}
+            </a>
         </div>
 
         <div class="mt-2">
 
-            @if($record['amount'])
-               {{ money($record['amount'], $record['currency']) }}
-            @endif
+{{--            @if($record['amount']) {{ money($record['amount'], $record['currency']) }} @endif--}}
 
             <div class="mb-0 d-inline-block float-right">
+
                 @if(!empty($record['person_name']))
+
                     <i class="fa fa-user-circle" aria-hidden="true"></i>
-                    {{ $record['person_name'] }}
+                    {{ $record['person_name'] }}  {{ $record['phone'] }}
+
                 @endif
+
+{{--                @php dd($record); @endphp--}}
+
             </div>
         </div>
 
