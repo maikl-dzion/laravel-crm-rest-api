@@ -23,110 +23,62 @@ use VentureDrake\LaravelCrm\Models\LeadSource;
 
 class LeadController extends Controller
 {
-    /**
-     * @var LeadService
-     */
-    private $leadService;
 
-    /**
-     * @var DealService
-     */
-    private $dealService;
-
-    /**
-     * @var PersonService
-     */
-    private $personService;
-
-    /**
-     * @var OrganisationService
-     */
-    private $organisationService;
-
-    public function __construct(LeadService $leadService, DealService $dealService, PersonService $personService, OrganisationService $organisationService)
+    public function __construct(
+        protected LeadService $leadService,
+        protected DealService $dealService,
+        protected PersonService $personService,
+        protected OrganisationService $organisationService
+    )
     {
-        $this->leadService = $leadService;
-        $this->dealService = $dealService;
-        $this->personService = $personService;
-        $this->organisationService = $organisationService;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
+    public function index(Request $request) : mixed
     {
-        $viewSetting = auth()->user()->crmSettings()->where('name', 'view_leads')->first();
 
-        if (!$viewSetting) {
+        $viewSetting = auth()->user()->crmSettings()->firstOrCreate(
+            ['name' => 'view_leads'],
+            ['value' => 'list']
+        );
 
-            auth()->user()->crmSettings()->create([
-                'name' => 'view_leads',
-                'value' => 'list',
-            ]);
-
-        } elseif ($viewSetting->value == 'board') {
+        if ($viewSetting->value == 'board') {
             return redirect(route('laravel-crm.leads.board'));
         }
 
         Lead::resetSearchValue($request);
 
-        $params = Lead::filters($request);
+        $query = Lead::filter(Lead::filters($request))
+            ->whereNull('converted_at')
+            ->latest();
 
-        if (Lead::filter($params)->whereNull('converted_at')->get()->count() < 30) {
-            $leads = Lead::filter($params)->whereNull('converted_at')->latest()->get();
-        } else {
-            $leads = Lead::filter($params)->whereNull('converted_at')->latest()->paginate(30);
-        }
+        $leads = $query->count() < 30 ? $query->get() : $query->paginate(30);
+
+        // Предзагрузка отношений если они используются в представлении
+       // $leads->load('contacts', 'company', 'pipelineStage');
 
         return view('laravel-crm::leads.index', [
             'leads' => $leads,
-            'viewSetting' => $viewSetting->value ?? null,
+            'viewSetting' => $viewSetting->value,
             'pipeline' => Pipeline::where('model', get_class(new Lead()))->first(),
         ]);
     }
 
-
-    protected function getLeadSources() : mixed
+    protected function getLeadSources(): array
     {
-        $sources = LeadSource::all();
-
-        $leadSources = [];
-
-        $leadSources[0] = 'Выбрать источник';
-
-        foreach ($sources as $source) {
-            $leadSources[$source->id] = $source->name;
-        }
-
-        return $leadSources;
+        $sources = LeadSource::select('id', 'name')->pluck('name', 'id')->toArray();
+        return [0 => 'Выбрать источник'] + $sources;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create(Request $request)
+    public function create(Request $request) : mixed
     {
 
         switch ($request->model) {
-            case 'client':
-                $client = Client::find($request->id);
-                break;
-
-            case 'organisation':
-                $organisation = Organisation::find($request->id);
-                break;
-
-            case 'person':
-                $person = Person::find($request->id);
-                break;
+            case 'client':       $client = Client::find($request->id); break;
+            case 'organisation': $organisation = Organisation::find($request->id); break;
+            case 'person':       $person = Person::find($request->id); break;
         }
 
-        if(empty($organisation)) {
+        if (empty($organisation)) {
             $organisation = $request->user()->getRelationOrganisation();
         }
 
@@ -135,24 +87,16 @@ class LeadController extends Controller
         return view('laravel-crm::leads.create', [
             'client' => $client ?? null,
             'organisation' => $organisation ?? null,
-            'person'   => $person ?? null,
+            'person' => $person ?? null,
             'pipeline' => Pipeline::where('model', get_class(new Lead()))->first(),
-            'stage'    => $request->stage ?? null,
-            'lead_sources'  => $leadSources
+            'stage' => $request->stage ?? null,
+            'lead_sources' => $leadSources
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
     // public function store(StoreLeadRequest $request)
+    public function store(Request $request)
     {
-
-        // dd($request->all());
 
         $client = null;
 
@@ -201,13 +145,7 @@ class LeadController extends Controller
         return redirect(route('laravel-crm.leads.index'));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param \App\Lead $lead
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Lead $lead)
+    public function show(Lead $lead) : mixed
     {
         $email = $lead->getPrimaryEmail();
         $phone = $lead->getPrimaryPhone();
@@ -229,23 +167,23 @@ class LeadController extends Controller
      */
     public function edit(Lead $lead, Request $request)
     {
-        $email   = $lead->getPrimaryEmail();
-        $phone   = $lead->getPrimaryPhone();
+        $email = $lead->getPrimaryEmail();
+        $phone = $lead->getPrimaryPhone();
         $address = $lead->getPrimaryAddress();
-        $person  = $lead->person;
+        $person = $lead->person;
 
         $leadSources = $this->getLeadSources();
 
         $organisation = $request->user()->getRelationOrganisation();
 
         return view('laravel-crm::leads.edit', [
-            'lead'     => $lead,
-            'email'    => $email ?? null,
-            'phone'    => $phone ?? null,
-            'address'  => $address ?? null,
-            'person'   => $person,
-            'lead_sources'  => $leadSources,
-            'organisation'  => $organisation ?? null,
+            'lead' => $lead,
+            'email' => $email ?? null,
+            'phone' => $phone ?? null,
+            'address' => $address ?? null,
+            'person' => $person,
+            'lead_sources' => $leadSources,
+            'organisation' => $organisation ?? null,
             'pipeline' => Pipeline::where('model', get_class(new Lead()))->first()
         ]);
     }
@@ -258,7 +196,7 @@ class LeadController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Lead $lead)
-    // public function update(UpdateLeadRequest $request, Lead $lead)
+        // public function update(UpdateLeadRequest $request, Lead $lead)
     {
         $client = null;
 
@@ -322,8 +260,6 @@ class LeadController extends Controller
      */
     public function destroy(Lead $lead)
     {
-
-        dd('delete');
 
         $lead->delete();
 

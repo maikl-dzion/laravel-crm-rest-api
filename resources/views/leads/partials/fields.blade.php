@@ -215,6 +215,20 @@
                             </div>
                         </div>
 
+                        <div class="col-12 mt-3">
+                            <div class="form-group" style="display: flex">
+                                <div  style="width: 40%; margin-right: 10px"> Создание </div>
+                                <input type="text" disabled value="{{$lead->created_at ?? ''}}" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form-group" style="display: flex">
+                                <div  style="width: 40%; margin-right: 10px"> Изменение </div>
+                                <input type="text" disabled value="{{$lead->updated_at ?? ''}}" class="form-control">
+                            </div>
+                        </div>
+
                     </div>
 
                   </div>

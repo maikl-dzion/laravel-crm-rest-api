@@ -27,7 +27,7 @@
                 $(document).ready(function () {
 
                     $(document).on("change", "#inputCreateForm input[name='noted_at']", function () {
-                    @this.set('noted_at', $(this).val());
+                        @this.set('noted_at', $(this).val());
                     });
 
                     window.addEventListener('noteAddOn', event => {

@@ -44,6 +44,7 @@
             <thead>
             <tr>
                 <th scope="col">{{ ucwords(__('laravel-crm::lang.created')) }}</th>
+                <th scope="col"> Изменено </th>
                 <th scope="col">{{ ucwords(__('laravel-crm::lang.title')) }}</th>
                 <th scope="col">{{ ucwords(__('laravel-crm::lang.labels')) }}</th>
 {{--                <th scope="col">{{ ucwords(__('laravel-crm::lang.value')) }}</th>--}}
@@ -62,7 +63,30 @@
             <tbody>
             @foreach($leads as $lead)
                 <tr class="has-link" data-url="{{ url(route('laravel-crm.leads.show',$lead)) }}">
-                    <td>{{ $lead->created_at->locale('ru')->diffForHumans() }}</td>
+                    <td>
+                        <div>{{ $lead->created_at->locale('ru')->diffForHumans() }}</div>
+                        <div>
+                            @php
+                                if(!empty($lead->created_at)) echo (new DateTimeImmutable($lead->created_at))->format('d.m.Y H:i');
+                            @endphp
+                        </div>
+                    </td>
+
+                    <td>
+
+                        <div>
+                            @php
+                                if(!empty($lead->updated_at)) echo $lead->updated_at->locale('ru')->diffForHumans() ;
+                            @endphp
+                        </div>
+
+                        <div>
+                            @php
+                                if(!empty($lead->updated_at)) echo (new DateTimeImmutable($lead->updated_at))->format('d.m.Y H:i');
+                            @endphp
+                        </div>
+                    </td>
+
                     <td>{{ $lead->title }}</td>
                     <td>@include('laravel-crm::partials.labels',[
                             'labels' => $lead->labels,
