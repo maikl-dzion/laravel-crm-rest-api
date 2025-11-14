@@ -4,13 +4,30 @@
 
         @slot('title')
 
-            <span>
+            <div>
                  {{ ucfirst(__('laravel-crm::lang.leads')) }}
-            </span>
+            </div>
 
-            <span>
+{{--            <div style="margin-top: 5px;">--}}
 
-            </span>
+{{--                <form role="search" method="get" action="http://localhost:8000/leads/search"--}}
+{{--                        name="formSearch"  class="navbar-form-custom">--}}
+{{--                        <input type="hidden" name="_token" value="n3yApVmOkA0LnCUrCe8H17ZzwNxXKls7GAexT5sy">--}}
+{{--                        <input type="hidden" name="type" value="laravel-crm.leads.search" >--}}
+
+{{--                        <div class="input-group">--}}
+{{--                            <input type="text" class="form-control" name="search" aria-label="Search" value="Куплю Audi 200 бу">--}}
+
+{{--                            <div class="input-group-append">--}}
+{{--                                <button class="btn btn-outline-secondary" type="submit">--}}
+{{--                                    <i class="fa fa-search" aria-hidden="true"></i>--}}
+{{--                                    <span class="action-current"> телефон </span>--}}
+{{--                                </button>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                </form>--}}
+
+{{--            </div>--}}
 
         @endslot
 
@@ -29,8 +46,9 @@
             ])
 
             @can('create crm leads')
-                <a type="button" class="btn btn-primary btn-sm" href="{{ url(route('laravel-crm.leads.create')) }}" style="margin: 0px 0px 0px 5px !important;">
-                    <span class="fa fa-plus"></span>  {{ ucfirst(__('laravel-crm::lang.add_lead')) }}
+                <a type="button" class="btn btn-primary btn-sm" href="{{ url(route('laravel-crm.leads.create')) }}"
+                   style="margin: 0px 0px 0px 5px !important;">
+                    <span class="fa fa-plus"></span> {{ ucfirst(__('laravel-crm::lang.add_lead')) }}
                 </a>
             @endcan
 
@@ -40,11 +58,11 @@
 
     @component('laravel-crm::components.card-table')
 
-        <table class="table mb-0 card-table table-hover" >
+        <table class="table mb-0 card-table table-hover">
             <thead>
             <tr>
                 <th scope="col">{{ ucwords(__('laravel-crm::lang.created')) }}</th>
-                <th scope="col"> Изменено </th>
+                <th scope="col"> Изменено</th>
                 <th scope="col">{{ ucwords(__('laravel-crm::lang.title')) }}</th>
                 <th scope="col">{{ ucwords(__('laravel-crm::lang.labels')) }}</th>
                 {{--                <th scope="col">{{ ucwords(__('laravel-crm::lang.value')) }}</th>--}}
@@ -52,11 +70,11 @@
                 {{--                <th scope="col">{{ ucwords(__('laravel-crm::lang.organization')) }}</th>--}}
                 {{--                <th scope="col">{{ ucwords(__('laravel-crm::lang.contact_person')) }}</th>--}}
                 <th scope="col"> Перезвонить</th>
-                <th scope="col"> Телефон </th>
-                <th scope="col"> Клиент </th>
+                <th scope="col"> Телефон</th>
+                <th scope="col"> Клиент</th>
                 <th scope="col">{{ ucwords(__('laravel-crm::lang.stage')) }}</th>
                 {{--                <th scope="col">{{ ucwords(__('laravel-crm::lang.owner')) }}</th>--}}
-                <th scope="col"> Ответственный </th>
+                <th scope="col"> Ответственный</th>
                 <th scope="col" width="210"></th>
             </tr>
             </thead>
@@ -104,10 +122,11 @@
                     <td>{{ $lead->person->name ??  null }}</td>
                     <td>{{ $lead->pipelineStage->name ?? null }}</td>
                     <td>{{ $lead->ownerUser->name ?? ucfirst(__('laravel-crm::lang.unallocated')) }}</td>
-                    <td class="disable-link text-right" >
+                    <td class="disable-link text-right">
 
                         @can('edit crm leads')
-                            <a href="{{ route('laravel-crm.leads.edit',$lead) }}" class="btn btn-outline-secondary btn-sm"
+                            <a href="{{ route('laravel-crm.leads.edit',$lead) }}"
+                               class="btn btn-outline-secondary btn-sm"
                                style="margin: 0px 5px 0px 5px !important;">
                                 <span class="fa fa-edit" aria-hidden="true"></span>
                             </a>
@@ -115,8 +134,9 @@
 
                         @hasdealsenabled
                         @can('edit crm leads')
-                            <a href="{{ route('laravel-crm.leads.convert-to-deal',$lead) }}" class="btn btn-success btn-sm"
-                               style="margin: 0px 5px 0px 0px !important;" >
+                            <a href="{{ route('laravel-crm.leads.convert-to-deal',$lead) }}"
+                               class="btn btn-success btn-sm"
+                               style="margin: 0px 5px 0px 0px !important;">
                                 {{ ucfirst(__('laravel-crm::lang.convert')) }} в сделку
                             </a>
                         @endcan
@@ -125,10 +145,14 @@
                         {{--                        <a href="{{ route('laravel-crm.leads.show',$lead) }}" class="btn btn-outline-secondary btn-sm"><span class="fa fa-eye" aria-hidden="true"></span></a>--}}
                         {{--                        @endcan--}}
                         @can('delete crm leads')
-                            <form action="{{ route('laravel-crm.leads.destroy',$lead) }}" method="POST" class="form-check-inline mr-0 form-delete-button">
+                            <form action="{{ route('laravel-crm.leads.destroy',$lead) }}" method="POST"
+                                  class="form-check-inline mr-0 form-delete-button">
                                 {{ method_field('DELETE') }}
                                 {{ csrf_field() }}
-                                <button class="btn btn-danger btn-sm" type="submit" data-model="{{ __('laravel-crm::lang.lead') }}"><span class="fa fa-trash-o" aria-hidden="true"></span></button>
+                                <button class="btn btn-danger btn-sm" type="submit"
+                                        data-model="{{ __('laravel-crm::lang.lead') }}"><span class="fa fa-trash-o"
+                                                                                              aria-hidden="true"></span>
+                                </button>
                             </form>
                         @endcan
 
