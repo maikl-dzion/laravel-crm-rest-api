@@ -2,40 +2,18 @@
 
     <div class="col-sm-6 border-right" >
 
-{{--        @livewire('live-lead-form',[--}}
-{{--            'lead' => $lead ?? null,--}}
-{{--            'generateTitle' => $generateTitle ?? true,--}}
-{{--            'client' => $client ?? null,--}}
-{{--            'organisation' => $organisation ?? null,--}}
-{{--            'person' => $person ?? null--}}
-{{--        ])--}}
-
-{{--        @if(!empty($action) && $action == 'edit')--}}
-
-{{--            @livewire('live-lead-form',[--}}
-{{--                'lead' => $lead ?? null,--}}
-{{--                'generateTitle' => $generateTitle ?? true,--}}
-{{--                'client' => $client ?? null,--}}
-{{--                'organisation' => $organisation ?? null,--}}
-{{--                'person' => $person ?? null--}}
-{{--            ])--}}
-
-{{--        @else--}}
-
-            <div class="form-group ">
-                <label for="organisation_name"> Организация <span class="required-label"> * </span></label>
-                <div class="autocomplete-control">
-                    <div class="input-group dropdown show">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" ><span class="fa fa-building" aria-hidden="true"></span></span>
-                        </div>
-                        <input value="{{$organisation->name}}" name="organisation_name" id="input_organisation_name" type="text"  disabled
-                               class="form-control dropdown-toggle" >
+        <div class="form-group ">
+            <label for="organisation_name"> Организация <span class="required-label"> * </span></label>
+            <div class="autocomplete-control">
+                <div class="input-group dropdown show">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" ><span class="fa fa-building" aria-hidden="true"></span></span>
                     </div>
+                    <input value="{{$organisation->name}}" name="organisation_name" id="input_organisation_name" type="text"  disabled
+                           class="form-control dropdown-toggle" >
                 </div>
             </div>
-
-{{--        @endif--}}
+        </div>
 
         @include('laravel-crm::partials.form.text',[
             'name' => 'title',
@@ -51,71 +29,32 @@
              'value' => old('description', $lead->description ?? null)
         ])
 
-{{--        @include('laravel-crm::partials.form.text',[--}}
-{{--            'name' => 'call_back',--}}
-{{--            'label' => 'Перезвонить',--}}
-{{--            // 'required' => 'true'--}}
-{{--            'value' => old('title', $lead->call_back ?? null)--}}
-{{--        ])--}}
-
         <div class="form-group">
-
             <div class="row" >
-
                 <div class="col-6">
-
                     <label for="call_back"> Перезвонить </label>
                     <div class="autocomplete-control">
                         <input type="datetime-local" value="{{$lead->call_back ?? ''}}" name="call_back"  id="input_call_back"  class="form-control">
                     </div>
-
                 </div>
-
                 <div class="col-6">
-
                     <label for="call_back"> Приехал </label>
                     <div class="autocomplete-control">
                         <input type="datetime-local" value="{{$lead->will_come ?? ''}}" name="will_come"  id="input_call_back"  class="form-control">
                     </div>
-
                 </div>
-
             </div>
-
         </div>
-
-{{--        <div class="row">--}}
-{{--            <div class="col-sm-6">--}}
-{{--                @include('laravel-crm::partials.form.text',[--}}
-{{--                      'name' => 'amount',--}}
-{{--                      'label' => ucfirst(__('laravel-crm::lang.value')),--}}
-{{--                      'prepend' => '<span class="fa fa-dollar" aria-hidden="true"></span>',--}}
-{{--                      'value' => old('amount', ((isset($lead->amount)) ? ($lead->amount / 100) : null) ?? null)--}}
-{{--                  ])--}}
-{{--            </div>--}}
-{{--            <div class="col-sm-6">--}}
-{{--                @include('laravel-crm::partials.form.select',[--}}
-{{--                    'name' => 'currency',--}}
-{{--                    'label' => ucfirst(__('laravel-crm::lang.currency')),--}}
-{{--                    'options' => \VentureDrake\LaravelCrm\Http\Helpers\SelectOptions\currencies(),--}}
-{{--                    'value' => old('currency', $lead->currency ?? \VentureDrake\LaravelCrm\Models\Setting::currency()->value ?? 'USD')--}}
-{{--                ])--}}
-{{--            </div>--}}
-{{--        </div>--}}
 
         @if($pipeline)
             @include('laravel-crm::partials.form.select',[
-                     'name' => 'pipeline_stage_id',
-                     'label' => ucfirst(__('laravel-crm::lang.stage')),
-                     'options' => $pipeline->pipelineStages()
-                                            ->orderBy('order')
-                                            ->orderBy('id')
-                                            ->pluck('name', 'id') ?? [],
-                     'value' =>  old('pipeline_stage_id', $lead->pipelineStage->id ?? $stage ?? $pipeline->pipelineStages()
-                                            ->orderBy('order')
-                                            ->orderBy('id')
-                                            ->first()->id ?? null),
-              ])
+                     'name'    => 'pipeline_stage_id',
+                     'label'   => ucfirst(__('laravel-crm::lang.stage')),
+                     'options' => $pipeline->pipelineStages()->orderBy('order')->orderBy('id')->pluck('name', 'id') ?? [],
+                     'value'   =>  old('pipeline_stage_id', $lead->pipelineStage->id ?? $stage ??
+                                            $pipeline->pipelineStages()->orderBy('order')->orderBy('id')->first()->id ?? null
+                                 ),
+            ])
         @endif
 
         @include('laravel-crm::partials.form.select',[
@@ -143,7 +82,7 @@
 
     </div>
 
-    <div class="col-sm-6" style="border:0px red solid" >
+    <div class="col-sm-6" >
 
         <h6 class="text-uppercase">
             <span class="fa fa-user" aria-hidden="true"></span>
@@ -156,77 +95,28 @@
 
             <div class="row">
 
-{{--                <div class="col-sm-12">--}}
-
-{{--                    <div class="form-group ">--}}
-{{--                        <label for="input_client_name"> Клиент </label>--}}
-{{--                        <div class="autocomplete-control">--}}
-{{--                            <div class="input-group dropdown">--}}
-{{--                                <div class="input-group-prepend">--}}
-{{--                                   <span class="input-group-text" ><span class="fa fa-address-card" aria-hidden="true"></span></span>--}}
-{{--                                </div>--}}
-{{--                                <input name="client_name" value="" id="input_client_name" type="text"  class="form-control dropdown-toggle">--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-
-{{--                </div>--}}
-
-{{--                <div class="col-sm-12 mb-4" >--}}
-{{--                    <label for="input_client_name">  </label>--}}
-{{--                    <div class="autocomplete-control">--}}
-{{--                        <div class="input-group dropdown">--}}
-{{--                            <div class="input-group-prepend">--}}
-{{--                               <span class="input-group-text" ><span class="fa fa-address-card" aria-hidden="true"></span></span>--}}
-{{--                            </div>--}}
-{{--                            <input name="person_name" value="" id="input_client_name" type="text"  class="form-control dropdown-toggle">--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-
                 <div class="col-sm-6">
-
                     @include('laravel-crm::partials.form.text',[
-                     'name' => 'phone',
-                     'label' => ucfirst(__('laravel-crm::lang.phone')),
-                     'value' => old('phone', $person->phone ?? null),
-                      // 'attributes' => ['disabled' => 'disabled']
-                  ])
+                         'name' => 'phone',
+                         'label' => ucfirst(__('laravel-crm::lang.phone')),
+                         'value' => old('phone', $person->phone ?? null),
+                    ])
                 </div>
+
                 <div class="col-sm-6">
                     @include('laravel-crm::partials.form.select',[
-                     'name' => 'phone_type',
-                     'label' => ucfirst(__('laravel-crm::lang.type')),
-                     'options' => \VentureDrake\LaravelCrm\Http\Helpers\SelectOptions\phoneTypes(),
-                     'value' => old('phone_type', $phone->type ??  'mobile'),
-                     // 'attributes' => ['disabled' => 'disabled']
-                  ])
+                         'name' => 'phone_type',
+                         'label' => ucfirst(__('laravel-crm::lang.type')),
+                         'options' => \VentureDrake\LaravelCrm\Http\Helpers\SelectOptions\phoneTypes(),
+                         'value' => old('phone_type', $phone->type ??  'mobile'),
+                         // 'attributes' => ['disabled' => 'disabled']
+                   ])
                 </div>
 
             </div>
 
-{{--            <div class="row">--}}
-{{--                <div class="col-sm-6">--}}
-{{--                    @include('laravel-crm::partials.form.text',[--}}
-{{--                     'name' => 'email',--}}
-{{--                     'label' => ucfirst(__('laravel-crm::lang.email')),--}}
-{{--                     'value' => old('email', $email->address ?? null),--}}
-{{--                     // 'attributes' => ['disabled' => 'disabled']--}}
-{{--                  ])--}}
-{{--                </div>--}}
-{{--                <div class="col-sm-6">--}}
-{{--                    @include('laravel-crm::partials.form.select',[--}}
-{{--                     'name' => 'email_type',--}}
-{{--                     'label' => ucfirst(__('laravel-crm::lang.type')),--}}
-{{--                     'options' => \VentureDrake\LaravelCrm\Http\Helpers\SelectOptions\emailTypes(),--}}
-{{--                     'value' => old('email_type', $email->type ?? 'work'),--}}
-{{--                     // 'attributes' => ['disabled' => 'disabled']--}}
-{{--                  ])--}}
-{{--                </div>--}}
-{{--            </div>--}}
-
             <div class="row" >
-                 <div class="col-sm-12 border-right">
+                 <div class="col-sm-12 border-right1">
 
                     <div class="row">
 
@@ -301,7 +191,21 @@
                             </div>
                         </div>
 
-                        <div class="col-8">
+                        <div class="col-12">
+                            <div class="form-group" >
+
+                                @if(!empty($person->check_address))
+                                    <input type="checkbox" id="apple" name="check_address" value="1" checked >
+                                @else
+                                    <input type="checkbox" id="apple" name="check_address" value="1">
+                                @endif
+
+                                <label style="margin-left: 10px"> Проживает по месту регистрации </label>
+
+                            </div>
+                        </div>
+
+                        <div class="col-12">
                             <div class="form-group ">
                                 <label for="middle_name"> Место регистрации </label>
                                 <div class="autocomplete-control">
@@ -311,104 +215,12 @@
                             </div>
                         </div>
 
-                        <div class="col-4">
-                            <div class="form-group" >
-
-                                 <label> Проживает по месту регистрации </label>
-
-                                @if(!empty($person->check_address))
-                                    <input type="checkbox" id="apple" name="check_address" value="1" checked >
-                                @else
-                                    <input type="checkbox" id="apple" name="check_address" value="1">
-                                @endif
-
-                            </div>
-                        </div>
-
                     </div>
 
                   </div>
             </div>
 
         </span>
-
-{{--        <h6 class="text-uppercase mt-4"><span class="fa fa-building" aria-hidden="true"></span> {{ strtoupper(__('laravel-crm::lang.organization')) }} </h6>--}}
-
-{{--        <hr />--}}
-
-{{--        <span class="autocomplete-organisation">--}}
-{{--         --}}
-{{--            @include('laravel-crm::partials.form.text',[--}}
-{{--               'name' => 'line1',--}}
-{{--               'label' => ucfirst(__('laravel-crm::lang.address_line_1')),--}}
-{{--               'value' => old('line1', $address->line1 ?? null),--}}
-{{--               'attributes' => [--}}
-{{--                         'disabled' => 'disabled'--}}
-{{--                     ]--}}
-{{--            ])--}}
-{{--            @include('laravel-crm::partials.form.text',[--}}
-{{--               'name' => 'line2',--}}
-{{--               'label' => ucfirst(__('laravel-crm::lang.address_line_2')),--}}
-{{--               'value' => old('line2', $address->line2 ?? null),--}}
-{{--               'attributes' => [--}}
-{{--                         'disabled' => 'disabled'--}}
-{{--                     ]--}}
-
-{{--            ])--}}
-{{--            @include('laravel-crm::partials.form.text',[--}}
-{{--               'name' => 'line3',--}}
-{{--               'label' => ucfirst(__('laravel-crm::lang.address_line_3')),--}}
-{{--               'value' => old('line3', $address->line3 ?? null),--}}
-{{--               'attributes' => [--}}
-{{--                         'disabled' => 'disabled'--}}
-{{--                     ]--}}
-{{--            ])--}}
-{{--            <div class="row">--}}
-{{--                <div class="col-sm-6">--}}
-{{--                    @include('laravel-crm::partials.form.text',[--}}
-{{--                       'name' => 'city',--}}
-{{--                       'label' => ucfirst(__('laravel-crm::lang.suburb')),--}}
-{{--                       'value' => old('city', $address->city ?? null),--}}
-{{--                        'attributes' => [--}}
-{{--                            'disabled' => 'disabled'--}}
-{{--                         ]--}}
-{{--                    ])--}}
-{{--                </div>--}}
-{{--                <div class="col-sm-6">--}}
-{{--                    @include('laravel-crm::partials.form.text',[--}}
-{{--                       'name' => 'state',--}}
-{{--                       'label' => ucfirst(__('laravel-crm::lang.state')),--}}
-{{--                       'value' => old('state', $address->state ?? null),--}}
-{{--                       'attributes' => [--}}
-{{--                                 'disabled' => 'disabled'--}}
-{{--                        ]--}}
-{{--                    ])--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--            <div class="row">--}}
-{{--                <div class="col-sm-6">--}}
-{{--                    @include('laravel-crm::partials.form.text',[--}}
-{{--                       'name' => 'code',--}}
-{{--                       'label' => ucfirst(__('laravel-crm::lang.postcode')),--}}
-{{--                       'value' => old('code', $address->code ?? null),--}}
-{{--                        'attributes' => [--}}
-{{--                         'disabled' => 'disabled'--}}
-{{--                        ]--}}
-{{--                    ])--}}
-{{--                </div>--}}
-{{--                <div class="col-sm-6">--}}
-{{--                    @include('laravel-crm::partials.form.select',[--}}
-{{--                     'name' => 'country',--}}
-{{--                     'label' => ucfirst(__('laravel-crm::lang.country')),--}}
-{{--                     'options' => \VentureDrake\LaravelCrm\Http\Helpers\SelectOptions\countries(),--}}
-{{--                     'value' => old('country', $address->country ?? 'United States'),--}}
-{{--                     'attributes' => [--}}
-{{--                         'disabled' => 'disabled'--}}
-{{--                     ]--}}
-{{--                  ])--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </span>--}}
 
     </div>
 

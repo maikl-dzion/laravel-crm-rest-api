@@ -3,15 +3,24 @@
     @component('laravel-crm::components.card-header')
 
         @slot('title')
-            {{ $lead->title }} @if($lead->pipelineStage) <small><span class="badge badge-secondary">{{ $lead->pipelineStage->name }}</span> @endif</small>
+
+            {{ $lead->title }}
+
+            @if($lead->pipelineStage)
+                <small><span class="badge badge-secondary">{{ $lead->pipelineStage->name }}</span></small>
+            @endif
+
         @endslot
 
         @slot('actions')
+
             <span class="float-right" >
+
                 @include('laravel-crm::partials.return-button',[
                     'model' => $lead,
                     'route' => 'leads'
                 ])
+
                 @hasdealsenabled
                     @can('edit crm leads')
                     | <a href="{{ route('laravel-crm.leads.convert-to-deal',$lead) }}" class="btn btn-success btn-sm">
@@ -19,18 +28,25 @@
                       </a>
                     @endcan
                 @endhasdealsenabled
+
                 @include('laravel-crm::partials.navs.activities') |
+
                 @can('edit crm leads')
-                <a href="{{ url(route('laravel-crm.leads.edit', $lead)) }}" type="button" class="btn btn-outline-secondary btn-sm"><span class="fa fa-edit" aria-hidden="true"></span></a>
+                    <a href="{{ url(route('laravel-crm.leads.edit', $lead)) }}" type="button" class="btn btn-outline-secondary btn-sm">
+                        <span class="fa fa-edit" aria-hidden="true"></span>
+                    </a>
                 @endcan
+
                 @can('delete crm leads')
-                <form action="{{ route('laravel-crm.leads.destroy',$lead) }}" method="POST" class="form-check-inline mr-0 form-delete-button">
-                    {{ method_field('DELETE') }}
-                    {{ csrf_field() }}
-                    <button class="btn btn-danger btn-sm" type="submit" data-model="{{ __('laravel-crm::lang.lead') }}"><span class="fa fa-trash-o" aria-hidden="true"></span></button>
-                </form>
+                    <form action="{{ route('laravel-crm.leads.destroy',$lead) }}" method="POST" class="form-check-inline mr-0 form-delete-button">
+                        {{ method_field('DELETE') }}
+                        {{ csrf_field() }}
+                        <button class="btn btn-danger btn-sm" type="submit" data-model="{{ __('laravel-crm::lang.lead') }}"><span class="fa fa-trash-o" aria-hidden="true"></span></button>
+                    </form>
                 @endcan
+
             </span>
+
         @endslot
 
     @endcomponent
@@ -68,18 +84,10 @@
                     @endif
                 </p>
 
-{{--                <h6 class="mt-4 text-uppercase"> {{ ucfirst(__('laravel-crm::lang.client')) }}</h6>--}}
-{{--                <hr />--}}
-
-{{--                <p><span class="fa fa-address-card" aria-hidden="true"></span> @if($lead->client)<a href="{{ route('laravel-crm.clients.show',$lead->client) }}">{{ $lead->client->name }}</a>@endif</p>--}}
-{{--                <h6 class="mt-4 text-uppercase"> {{ ucfirst(__('laravel-crm::lang.organization')) }}</h6>--}}
-{{--                <hr />--}}
-{{--                <p><span class="fa fa-building" aria-hidden="true"></span> @if($lead->organisation)<a href="{{ route('laravel-crm.organisations.show',$lead->organisation) }}">{{ $lead->organisation->name }}</a>@endif</p>--}}
-{{--                <p><span class="fa fa-map-marker" aria-hidden="true"></span> {{ ($address) ? \VentureDrake\LaravelCrm\Http\Helpers\AddressLine\addressSingleLine($address) : null }} </p>--}}
-{{--                --}}
-
                 <h6 class="mt-4 text-uppercase"> Клиент </h6>
+
                 <hr />
+
                 <p><span class="fa fa-user" aria-hidden="true"></span>
                     @if($lead->person)
 
@@ -100,9 +108,7 @@
             </div>
 
             <div class="col-sm-6">
-                @include('laravel-crm::partials.activities', [
-                    'model' => $lead
-                ])
+                @include('laravel-crm::partials.activities', ['model' => $lead])
             </div>
         </div>
 
