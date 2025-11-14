@@ -4,7 +4,13 @@
 
         @slot('title')
 
-            {{ ucfirst(__('laravel-crm::lang.leads')) }}
+            <span>
+                 {{ ucfirst(__('laravel-crm::lang.leads')) }}
+            </span>
+
+            <span>
+
+            </span>
 
         @endslot
 

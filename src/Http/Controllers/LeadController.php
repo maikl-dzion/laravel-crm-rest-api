@@ -311,7 +311,7 @@ class LeadController extends Controller
 
         flash(ucfirst(trans('laravel-crm::lang.lead_updated')))->success()->important();
 
-        return redirect(route('laravel-crm.leads.show', $lead));
+        return redirect(route('laravel-crm.leads.index', $lead));
     }
 
     /**
@@ -322,6 +322,9 @@ class LeadController extends Controller
      */
     public function destroy(Lead $lead)
     {
+
+        dd('delete');
+
         $lead->delete();
 
         flash(ucfirst(trans('laravel-crm::lang.lead_deleted')))->success()->important();
