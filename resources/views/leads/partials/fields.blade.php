@@ -1,5 +1,6 @@
 <div class="row">
-    <div class="col-sm-6 border-right" style="border:0px red solid">
+
+    <div class="col-sm-6 border-right" >
 
 {{--        @livewire('live-lead-form',[--}}
 {{--            'lead' => $lead ?? null,--}}
@@ -49,6 +50,39 @@
              'rows' => 5,
              'value' => old('description', $lead->description ?? null)
         ])
+
+{{--        @include('laravel-crm::partials.form.text',[--}}
+{{--            'name' => 'call_back',--}}
+{{--            'label' => 'Перезвонить',--}}
+{{--            // 'required' => 'true'--}}
+{{--            'value' => old('title', $lead->call_back ?? null)--}}
+{{--        ])--}}
+
+        <div class="form-group">
+
+            <div class="row" >
+
+                <div class="col-6">
+
+                    <label for="call_back"> Перезвонить </label>
+                    <div class="autocomplete-control">
+                        <input type="datetime-local" value="{{$lead->call_back ?? ''}}" name="call_back"  id="input_call_back"  class="form-control">
+                    </div>
+
+                </div>
+
+                <div class="col-6">
+
+                    <label for="call_back"> Приехал </label>
+                    <div class="autocomplete-control">
+                        <input type="datetime-local" value="{{$lead->will_come ?? ''}}" name="will_come"  id="input_call_back"  class="form-control">
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
 
 {{--        <div class="row">--}}
 {{--            <div class="col-sm-6">--}}
@@ -225,7 +259,7 @@
                     <div class="row">
                         <div class="col">
                             <div class="form-group ">
-                                <label for="middle_name">Отчество </label>
+                                <label for="middle_name"> Отчество </label>
                                 <div class="autocomplete-control">
                                    <input id="input_middle_name" type="text"
                                           value="{{$person->middle_name ?? ''}}" name="middle_name"  class="form-control ">

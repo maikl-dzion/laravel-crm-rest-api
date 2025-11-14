@@ -36,6 +36,10 @@ class LeadService
             'amount'          => $request->amount ?? 0,
             'currency'        => $request->currency ?? 'RUB',
             'lead_source_id'  => $request->lead_source_id ?? null,
+
+            'call_back'  => $request->call_back ?? null,
+            'will_come'  => $request->will_come ?? null,
+
             'lead_status_id'  => 1,
             'user_owner_id'   => $request->user_owner_id,
             'pipeline_id'     => PipelineStage::find($request->pipeline_stage_id)->pipeline->id ?? null,
@@ -61,6 +65,10 @@ class LeadService
             'description' => $request->description,
             'amount' => $request->amount ?? 0,
             'currency' => $request->currency ?? 'RUB',
+
+            'call_back'  => $request->call_back ?? null,
+            'will_come'  => $request->will_come ?? null,
+
             'user_owner_id' => $request->user_owner_id,
             'pipeline_id' => PipelineStage::find($request->pipeline_stage_id)->pipeline->id ?? null,
             'pipeline_stage_id' => $request->pipeline_stage_id ?? null,

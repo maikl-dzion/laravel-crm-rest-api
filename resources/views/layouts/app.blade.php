@@ -16,15 +16,23 @@
     <script src="https://kit.fontawesome.com/489f6ee958.js" crossorigin="anonymous"></script>
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <script src="/vue-components/MyCounter.js"></script>
+
     <!-- Styles -->
     <link href="{{ asset('vendor/laravel-crm/css/app.css') }}?v=53156542375858" rel="stylesheet">
 
     @livewireStyles
 
     @include('laravel-crm::layouts.partials.favicon')
+
 </head>
 <body class="d-flex flex-column h-100">
+
     <div id="app" class="d-flex flex-column h-100">
         @auth
         <header>
@@ -52,7 +60,7 @@
                                     </li>
                                 @endif
                             @else
-                                @include('laravel-crm::layouts.partials.nav-user')  
+                                @include('laravel-crm::layouts.partials.nav-user')
                             @endguest
                         </ul>
                     </div>
@@ -82,11 +90,31 @@
             </div>
         </footer>
     </div>
+
     <script src="{{ asset('vendor/laravel-crm/js/app.js') }}?v=53156542375858"></script>
     <script src="{{ asset('vendor/laravel-crm/libs/bootstrap-multiselect/bootstrap-multiselect.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
     @livewireScripts
     @livewire('notify-toast')
     @stack('livewire-js')
+
+    <script>
+
+        const { createApp, ref } = Vue
+
+        const app = createApp({
+            setup() {
+                const message = ref('Hello vue!')
+                return {
+                    message
+                }
+            }
+        })
+
+        app.component('my-counter', MyCounter)
+        app.mount('#app')
+
+    </script>
+
 </body>
 </html>
