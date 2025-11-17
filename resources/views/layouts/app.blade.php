@@ -28,7 +28,20 @@
 
     @livewireStyles
 
-    @include('laravel-crm::layouts.partials.favicon')
+    @include('laravel-crm::layouts.partials.favicon');
+
+{{--    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" >--}}
+{{--    <link href="/assets/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" >--}}
+{{--    <link href="/assets/plugins/choices.js/public/assets/styles/choices.min.css" rel="stylesheet" >--}}
+{{--    <link href="/assets/plugins/select2/css/select2.min.css" rel="stylesheet" >--}}
+{{--    <link href="/assets/plugins/quill/quill.snow.css" rel="stylesheet" >--}}
+{{--    <link href="/assets/plugins/datatables/css/dataTables.bootstrap5.min.css" rel="stylesheet" >--}}
+{{--    <link href="/assets/plugins/intltelinput/css/intlTelInput.css" rel="stylesheet" >--}}
+{{--    <link href="/assets/plugins/intltelinput/css/demo.css" rel="stylesheet" >--}}
+{{--    <link href="/assets/plugins/flatpickr/flatpickr.min.css" rel="stylesheet" >--}}
+{{--    <link href="/assets/plugins/tabler-icons/tabler-icons.min.css" rel="stylesheet" >--}}
+{{--    <link href="/assets/plugins/simplebar/simplebar.min.css" rel="stylesheet" >--}}
+{{--    <link href="/assets/css/style.css" rel="stylesheet" >--}}
 
 </head>
 <body class="d-flex flex-column h-100">

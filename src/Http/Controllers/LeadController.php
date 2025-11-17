@@ -85,11 +85,11 @@ class LeadController extends Controller
         $leadSources = $this->getLeadSources();
 
         return view('laravel-crm::leads.create', [
-            'client' => $client ?? null,
+            'client'       => $client ?? null,
             'organisation' => $organisation ?? null,
-            'person' => $person ?? null,
-            'pipeline' => Pipeline::where('model', get_class(new Lead()))->first(),
-            'stage' => $request->stage ?? null,
+            'person'       => $person ?? null,
+            'pipeline'     => Pipeline::where('model', get_class(new Lead()))->first(),
+            'stage'        => $request->stage ?? null,
             'lead_sources' => $leadSources
         ]);
     }
