@@ -98,6 +98,8 @@ class PersonService
             $personTitle = $request->person_title;
         }
 
+        $checkAddress = (!empty($request->check_address)) ? $request->check_address : 0;
+
         $person->update([
             'title' => $personTitle,
             'first_name'  => $request->first_name,
@@ -108,7 +110,7 @@ class PersonService
             'description' => $request->description,
             'person_address'   => $request->person_address ?? null,
             'register_address' => $request->register_address ?? null,
-            'check_address'    => $request->check_address ?? null,
+            'check_address'    => $checkAddress,
             'user_owner_id'    => $request->user_owner_id,
             // 'phone'         => $request->phone,
         ]);

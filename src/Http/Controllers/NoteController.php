@@ -14,6 +14,7 @@ class NoteController extends Controller
      */
     public function index()
     {
+
         $notes = Note::where('user_created_id', auth()->user()->id)->latest();
 
         if ($notes->count() < 30) {

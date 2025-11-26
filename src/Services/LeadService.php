@@ -72,6 +72,7 @@ class LeadService
             'user_owner_id' => $request->user_owner_id,
             'pipeline_id' => PipelineStage::find($request->pipeline_stage_id)->pipeline->id ?? null,
             'pipeline_stage_id' => $request->pipeline_stage_id ?? null,
+            'lead_source_id' => $request->lead_source_id ?? null,
 
             'updated_at' => date('Y-m-d H:i:s')
         ]);

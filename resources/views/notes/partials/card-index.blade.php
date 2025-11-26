@@ -3,7 +3,7 @@
     <div class="card-header">
         @include('laravel-crm::layouts.partials.nav-activities')
     </div>
-    
+
     <div class="card-body p-0">
         <div class="tab-content">
             <div class="tab-pane active" id="roles" role="tabpanel">
@@ -40,6 +40,7 @@
             </div>
         </div>
     </div>
+
     @if($notes instanceof \Illuminate\Pagination\LengthAwarePaginator )
         @component('laravel-crm::components.card-footer')
             {{ $notes->links() }}

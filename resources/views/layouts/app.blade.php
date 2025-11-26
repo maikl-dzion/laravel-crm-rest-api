@@ -58,7 +58,10 @@
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <!-- Left Side Of Navbar -->
+
                         @include('laravel-crm::layouts.partials.search')
+
+                        <div style="margin-left: 10px "><a href="/v2/crm/lead/index"> Новая версия </a></div>
 
                         <!-- Right Side Of Navbar -->
                         <ul class="navbar-nav ml-auto">
