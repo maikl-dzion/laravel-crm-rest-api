@@ -14,6 +14,7 @@ class ActivityController extends Controller
      */
     public function index()
     {
+
         $activities = Activity::latest();
 
         if ($activities->count() < 30) {
